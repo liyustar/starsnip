@@ -11,7 +11,7 @@
 #include <iostream>
 using namespace std;
 
-#include "socket_util.h"
+#include "socketutil.h"
 int main(int argc, char *argv[]) {
 
 	char *server = argv[1];     // First arg: server address/name

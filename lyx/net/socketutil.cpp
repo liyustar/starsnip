@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <netdb.h>
 #include <string.h>
-#include "socket_util.h"
+#include "socketutil.h"
 
 static const int MAXPENDING = 5;	// Maximum outstanding connection requests
 

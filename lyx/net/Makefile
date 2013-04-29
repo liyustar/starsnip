@@ -5,7 +5,7 @@ ARFLAGS = rcs
 CXX = g++
 # CXXFLAGS = -I./include
 CPPFLAGS = -Wall
-OBJS = socket_util.o
+OBJS = socketutil.o
 BINS = liblyx_netutil.a
 
 all : $(BINS)

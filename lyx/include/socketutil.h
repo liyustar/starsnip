@@ -1,5 +1,5 @@
-#ifndef SOCKETUTILITY_H
-#define SOCKETUTILITY_H
+#ifndef SOCKETUTIL_H
+#define SOCKETUTIL_H
 
 #include <stdbool.h>
 #include <stdio.h>
