@@ -1,14 +1,21 @@
 #VPATH = src include
-#CXXFLAGS = -I./include
 
-net_test: net_test.o SocketUtility.o
-	g++ $^ -o $@
+AR = ar
+ARFLAGS = rcs
+CXX = g++
+# CXXFLAGS = -I./include
+CPPFLAGS = -Wall
+OBJS = socket_util.o
+BINS = liblyx_netutil.a
 
-net_test.o: SocketUtility.h
+all : $(BINS)
+
+$(BINS) : $(OBJS)
+	$(AR) $(ARFLAGS) $@ $^
 
 .PHONY: clean
 
 clean:
-	-rm *.o net_test
+	-rm *.o
 
 

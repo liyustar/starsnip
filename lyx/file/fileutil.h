@@ -1,5 +1,5 @@
-#ifndef _FILE_H
-#define _FILE_H
+#ifndef _FILEUTIL_H
+#define _FILEUTIL_H
 
 #include <sys/types.h>
 #include <sys/stat.h>

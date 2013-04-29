@@ -11,11 +11,18 @@
 void DieWithUserMessage(const char *msg, const char *detail);
 // Handle error with sys msg
 void DieWithSystemMessage(const char *msg);
+
+/*
+ * Server
+ */
 // Create, bind, and listen a new TCP server socket
 int SetupTCPServerSocket(const char *service);
 // Accept a new TCP connection on a server socket
 int AcceptTCPConnection(int servSock);
 
+/*
+ * Client
+ */
 int SetupTCPClientSocket(const char *host, const char *service);
 
 enum sizeConstants {

@@ -1,4 +1,4 @@
-#include "File.h"
+#include "fileutil.h"
 
 File::File(std::string filename) : fname(filename)
 {
