@@ -16,7 +16,7 @@ BEGIN { OFS = "\t" }
   # assign student's average to element of array
 	student_avg[NR] = avg
   # determine letter grade
-	if (avg >= 90)  grade = "A"
+	if (avg >= 90)  grade = "S"
 	else if (avg >= 80) grade = "B"
 	else if (avg >= 70) grade = "C"
 	else if (avg >= 60) grade = "D"
@@ -45,5 +45,5 @@ END {
 	print "Below Average: ", below_average     
   # print number of students per letter grade
 	for (letter_grade in class_grade)
-		print letter_grade ":", class_grade[letter_grade] | "sort"
+		print letter_grade ":", class_grade[letter_grade] # | "sort"
 }

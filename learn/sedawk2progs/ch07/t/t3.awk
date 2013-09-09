@@ -1,0 +1,2 @@
+/^$/ { print "blank line" }
+
