@@ -1,18 +1,20 @@
 #include <iostream>
 #include <string>
 #include "lyxUrl.h"
-#include "HttpRequest.h"
+// #include "HttpRequest.h"
 using namespace std;
 
 int main() {
-	string yooliUrl = "http://www.yooli.com"
+	// string yooliUrl = "yttp://www.yooli.com";
+	lyx::Url yooliUrl("http://www.yooli.com:888");
+	yooliUrl.test();
 
-	HttpRequest yooliRequest;
-	yooliRequest.setUrl(yooliUrl);
+	//HttpRequest yooliRequest;
+	//yooliRequest.setUrl(yooliUrl);
 	
-	string response = yooliRequest.sendRequest();
+	//string response = yooliRequest.sendRequest();
 
-	cout << response;
+	//cout << response;
 	return 0;
 }
 
