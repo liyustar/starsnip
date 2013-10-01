@@ -18,6 +18,7 @@ namespace lyx {
 		Http(const Http&);
 		void print();
 
+		std::string getMethodStr() const;
 		int createRequest(std::string &request);
 		int sendRequest(const std::string &request) const;
 		int recvResponse(std::response);

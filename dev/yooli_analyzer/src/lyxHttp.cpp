@@ -33,8 +33,26 @@ namespace lyx {
 		}
 	}
 
-	int Http::createRequest(std::string &request) {
+	string Http::getMethodStr() const {
+		string methodStr;
+		switch (m_method) {
+			case METHOD_POST:
+				methodStr = "POST";
+				break;
+			case METHOD_GET:
+			default:
+				methodStr = "GET";
+				break;
+		}
+		return methodStr;
+	}
 
+	int Http::createRequest(std::string &request) {
+		request.clear();
+		requese += getMethodStr().append(" ");
+		request += m_url.getPath().append(" HTTP/1.1\r\n");
+		request.append("\r\n");
+		return 0;
 	}
 
 	int Http::sendRequest(const std::string &request) {
