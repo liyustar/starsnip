@@ -46,17 +46,19 @@ namespace lyx {
 				m_proto = PROTO_UNKNOW;
 			}
 			pos += strlen("://");
+			markpos = pos;
 		}
 
 		// get host
-		markpos = pos;
 		pos = urlStr.find_first_of("/", markpos);
 		string host;
 		if (string::npos == pos) {
 			host = urlStr.substr(markpos);
+			m_path = "/";
 			parsedone = 1;
 		} else {
 			host = urlStr.substr(markpos, pos - markpos);
+			markpos = pos;
 		}
 
 		// parse host
@@ -73,6 +75,22 @@ namespace lyx {
 		if (parsedone == 1) {
 			return 0;
 		}
+
+		// get path
+		pos = urlStr.find_first_of("?", markpos);
+		if (string::npos == pos) {
+			m_path = urlStr.substr(markpos);
+			parsedone = 1;
+		} else {
+			m_path = urlStr.substr(markpos, pos - markpos);
+			pos += strlen("?");
+			markpos = pos;
+		}
+		if (parsedone == 1) {
+			return 0;
+		}
+
+		// parse query params
 	}
 
 	void Url::print() {
@@ -81,6 +99,7 @@ namespace lyx {
 		cout << m_proto << endl;
 		cout << m_hostname << endl;
 		cout << m_port << endl;
+		cout << m_path << endl;
 		cout << endl;
 	}
 

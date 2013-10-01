@@ -15,6 +15,7 @@ namespace lyx {
 		std::string m_url;
 		PROTO_TYPE m_proto;
 		std::string m_hostname;
+		std::string m_path;
 		int m_port;
 
 		int urlAnalyse(std::string urlStr);
