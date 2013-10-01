@@ -27,7 +27,12 @@ namespace lyx {
 		Url(std::string urlStr);
 		// Url(const Url& urlObj);
 		~Url();
-		std::string getUrlStr();
+
+		// getter
+		std::string getUrlStr() const;
+		std::string getHostname() const;
+		std::string getPath() const;
+		int getPort() const;
 
 		void test();
 	};

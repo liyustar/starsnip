@@ -20,10 +20,6 @@ namespace lyx {
 	Url::~Url() {
 	}
 
-	string Url::getUrlStr() {
-		return m_url;
-	}
-
 	/**
 	 * parse url
 	 * success: 0 		fail: 1
@@ -107,5 +103,18 @@ namespace lyx {
 		print();
 	}
 
+	// getter
+	string Url::getUrlStr() const {
+		return m_url;
+	}
+	string Url::getHostname() const {
+		return m_hostname;
+	}
+	string Url::getPath() const {
+		return m_path;
+	}
+	int Url::getPort() const {
+		return m_port;
+	}
 }
 
