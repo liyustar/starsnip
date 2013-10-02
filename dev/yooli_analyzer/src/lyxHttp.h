@@ -1,3 +1,6 @@
+#ifndef LYXHTTP_H
+#define LYXHTTP_H
+
 #include "lyxUrl.h"
 #include "lyxSocket.h"
 #include <string>
@@ -37,5 +40,4 @@ namespace lyx {
 	};
 }
 
-		
-		
+#endif // LYXHTTP_H

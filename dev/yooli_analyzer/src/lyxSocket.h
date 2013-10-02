@@ -1,3 +1,6 @@
+#ifndef LYXSOCKET_H
+#define LYXSOCKET_H
+
 #include <string>
 
 namespace lyx {
@@ -24,5 +27,4 @@ namespace lyx {
 	};
 }
 
-		
-		
+#endif // LYXSOCKET_H

@@ -1,3 +1,6 @@
+#ifndef LYXURL_H
+#define LYXURL_H
+
 #include <string>
 
 namespace lyx {
@@ -38,5 +41,4 @@ namespace lyx {
 	};
 }
 
-		
-		
+#endif // LYXURL_H
