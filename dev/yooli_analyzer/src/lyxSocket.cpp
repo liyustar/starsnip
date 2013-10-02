@@ -17,6 +17,14 @@ namespace lyx {
 		}
 	}
 
+	int Socket::send(const void *buf, int len, int flag) {
+		// process EINTER
+		return send(m_sock, buf, len, flag);
+	}
+
+	int Socket::recv(void *buf, int len, int flag) {
+		return recv(m_sock, buf, len, flag);
+	}
 
 	int Socket::setupSocket() {
 		const char *host = m_host.c_str();

@@ -16,6 +16,8 @@ namespace lyx {
 		Socket(const std::string &h, int p);
 		// Socket(const Socket& sockObj);
 		~Socket();
+		int send(const void *buf, int len, int flag = 0);
+		int recv(void *buf, int len, int flag = 0);
 		int setupSocket();
 
 		void test();
