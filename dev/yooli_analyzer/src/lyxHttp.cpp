@@ -58,11 +58,14 @@ namespace lyx {
 	}
 
 	int Http::sendRequest(Socket sock, const string &request) {
-
+		sock.send(request.c_str(), request.size());
 	}
 
 	int Http::recvResponse(Socket sock, string &response) {
-
+		char buf[1024*10];
+		int len = sock.recv(buf, 1024*10);
+		buf[len] = '\0';
+		printf("%s", buf);
 	}
 
 	int Http::getResponse(string &response) {
