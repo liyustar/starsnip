@@ -1,8 +1,10 @@
-#include <cstdlib>
+#include "lyxSocket.h"
 #include <unistd.h>
 #include <netdb.h>
 #include <string>
+#include <cstdio>
 #include <cstring>
+#include <cstdlib>
 
 using namespace std;
 
@@ -19,11 +21,11 @@ namespace lyx {
 
 	int Socket::send(const void *buf, int len, int flag) {
 		// process EINTER
-		return send(m_sock, buf, len, flag);
+		return ::send(m_sock, buf, len, flag);
 	}
 
 	int Socket::recv(void *buf, int len, int flag) {
-		return recv(m_sock, buf, len, flag);
+		return ::recv(m_sock, buf, len, flag);
 	}
 
 	int Socket::setupSocket() {

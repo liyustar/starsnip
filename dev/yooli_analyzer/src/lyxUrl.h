@@ -15,6 +15,7 @@ namespace lyx {
 
 	class Url {
 		private:
+		Url();
 		std::string m_url;
 		PROTO_TYPE m_proto;
 		std::string m_hostname;
@@ -22,8 +23,7 @@ namespace lyx {
 		int m_port;
 
 		int urlAnalyse(std::string urlStr);
-		Url();
-		Url(const Url&);
+		// Url(const Url&);
 		void print();
 
 		public:

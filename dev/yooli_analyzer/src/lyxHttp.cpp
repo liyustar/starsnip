@@ -7,18 +7,11 @@ using namespace std;
 
 namespace lyx {
 
-	Http::Http() {
-	}
+	Http::Http() : m_url("") { }
 
-	Http::Http(const Http& httpObj) {
-		*this = httpObj;
-	}
+	Http::Http(Url url) : m_url(url) { }
 
 	// void print();
-
-	Http::Http(Url url) {
-		m_url = url;
-	}
 
 	Http::~Http() {}
 
@@ -50,7 +43,7 @@ namespace lyx {
 
 	int Http::createRequest(std::string &request) {
 		request.clear();
-		requese.append(getMethodStr()).append(" ");
+		request.append(getMethodStr()).append(" ");
 		request.append(m_url.getPath()).append(" HTTP/1.1\r\n");
 		request.append("Host: ").append(m_url.getHostname()).append("\r\n");
 		request.append("\r\n");
@@ -62,10 +55,12 @@ namespace lyx {
 	}
 
 	int Http::recvResponse(Socket sock, string &response) {
-		char buf[1024*10];
-		int len = sock.recv(buf, 1024*10);
+		const int buflen = 200;
+		char buf[buflen];
+		int len = sock.recv(buf, buflen);
 		buf[len] = '\0';
-		printf("%s", buf);
+		// printf("%s", buf);
+		response = buf;
 	}
 
 	int Http::getResponse(string &response) {
@@ -76,7 +71,7 @@ namespace lyx {
 		res = sock.setupSocket();
 		res = createRequest(request);
 		res = sendRequest(sock, request);
-		return recvRespone(sock, response);
+		return recvResponse(sock, response);
 	}
 
 	// void test();

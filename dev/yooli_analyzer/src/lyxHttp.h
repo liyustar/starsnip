@@ -18,8 +18,7 @@ namespace lyx {
 		Url m_url;
 		METHOD_TYPE m_method;
 
-		Http();
-		Http(const Http&);
+		// Http(const Http&);
 		void print();
 
 		std::string getMethodStr() const;
@@ -28,6 +27,7 @@ namespace lyx {
 		int recvResponse(Socket sock, std::string &response);
 
 		public:
+		Http();
 		Http(Url url);
 		// Http(const Http& httpObj);
 		~Http();

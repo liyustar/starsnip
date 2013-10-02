@@ -12,10 +12,10 @@ namespace lyx {
 		int m_sock;
 
 		Socket();
-		Socket(const Socket&);
 		void print();
 
 		public:
+		// Socket(const Socket&);
 		Socket(const std::string &h, int p);
 		// Socket(const Socket& sockObj);
 		~Socket();
