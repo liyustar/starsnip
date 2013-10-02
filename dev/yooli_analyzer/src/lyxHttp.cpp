@@ -50,14 +50,14 @@ namespace lyx {
 
 	int Http::createRequest(std::string &request) {
 		request.clear();
-		requese += getMethodStr().append(" ");
-		request += m_url.getPath().append(" HTTP/1.1\r\n");
+		requese.append(getMethodStr()).append(" ");
+		request.append(m_url.getPath()).append(" HTTP/1.1\r\n");
+		request.append("Host: ").append(m_url.getHostname()).append("\r\n");
 		request.append("\r\n");
 		return 0;
 	}
 
 	int Http::sendRequest(Socket sock, const string &request) {
-
 
 	}
 
