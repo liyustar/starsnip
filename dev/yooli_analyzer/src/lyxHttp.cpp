@@ -1,5 +1,6 @@
 #include "lyxHttp.h"
 #include "lyxUrl.h"
+#include "lyxSocket.h"
 #include <string>
 
 using namespace std;
@@ -55,11 +56,12 @@ namespace lyx {
 		return 0;
 	}
 
-	int Http::sendRequest(const std::string &request) {
+	int Http::sendRequest(Socket sock, const string &request) {
+
 
 	}
 
-	int Http::recvResponse(std::response) {
+	int Http::recvResponse(Socket sock, string &response) {
 
 	}
 
@@ -67,9 +69,11 @@ namespace lyx {
 		// create http request
 		string request;
 		int res = 0; // result
+		Socket sock(m_url.getHostname(), m_url.getPort());
+		res = sock.setupSocket();
 		res = createRequest(request);
-		res = sendRequest(request);
-		return recvRespone(response);
+		res = sendRequest(sock, request);
+		return recvRespone(sock, response);
 	}
 
 	// void test();

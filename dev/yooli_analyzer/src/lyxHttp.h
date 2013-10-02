@@ -1,4 +1,5 @@
 #include "lyxUrl.h"
+#include "lyxSocket.h"
 #include <string>
 
 namespace lyx {
@@ -20,8 +21,8 @@ namespace lyx {
 
 		std::string getMethodStr() const;
 		int createRequest(std::string &request);
-		int sendRequest(const std::string &request) const;
-		int recvResponse(std::response);
+		int sendRequest(Socket sock, const std::string &request);
+		int recvResponse(Socket sock, std::string &response);
 
 		public:
 		Http(Url url);
