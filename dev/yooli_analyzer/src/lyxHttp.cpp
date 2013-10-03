@@ -1,7 +1,10 @@
 #include "lyxHttp.h"
 #include "lyxUrl.h"
 #include "lyxSocket.h"
+#include <unistd.h>
+#include <iostream>
 #include <string>
+#include <cstdio>
 
 using namespace std;
 
@@ -46,6 +49,12 @@ namespace lyx {
 		request.append(getMethodStr()).append(" ");
 		request.append(m_url.getPath()).append(" HTTP/1.1\r\n");
 		request.append("Host: ").append(m_url.getHostname()).append("\r\n");
+		// request.append("Accept: text/html,application/xml,application/xhtml+xml,text/html;*/*\r\n");
+		// request.append("User-Agent: LYX PROG/1.0\r\n");
+		// request.append("Accept-Charset: IOS-8859-1\r\n");
+		// request.append("Accept-Language: en;q=0.5\r\n");
+		// request.append("Accept-Encoding: gzip\r\n");
+		// request.append("Connection: Keep-Alive\r\n");
 		request.append("\r\n");
 		return 0;
 	}
@@ -58,9 +67,13 @@ namespace lyx {
 		const int buflen = 200;
 		char buf[buflen];
 		int len = sock.recv(buf, buflen);
-		buf[len] = '\0';
-		// printf("%s", buf);
-		response = buf;
+		if (len != -1) {
+			buf[len] = '\0';
+			response = buf;
+		} else {
+			perror("");
+		}
+		cout << "recv len: " << len << endl;
 	}
 
 	int Http::getResponse(string &response) {
@@ -77,5 +90,3 @@ namespace lyx {
 	// void test();
 }
 
-		
-		

@@ -14,9 +14,9 @@ namespace lyx {
 		: m_host(h), m_port(p) { }
 
 	Socket::~Socket() {
-		if (m_sock) {
-			close(m_sock);
-		}
+		// if (m_sock) {
+		// 	close(m_sock);
+		// }
 	}
 
 	int Socket::send(const void *buf, int len, int flag) {
