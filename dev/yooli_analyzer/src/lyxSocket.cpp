@@ -1,6 +1,7 @@
 #include "lyxSocket.h"
 #include <unistd.h>
 #include <netdb.h>
+#include <errno.h>
 #include <string>
 #include <cstdio>
 #include <cstring>
@@ -20,12 +21,46 @@ namespace lyx {
 	}
 
 	int Socket::send(const void *buf, int len, int flag) {
-		// process EINTER
-		return ::send(m_sock, buf, len, flag);
+		int totalsend = 0;
+		while (totalsend < len) {
+			int sendlen = write(m_sock, buf, len);
+			if (-1 == sendlen && EINTR == errno) {
+				continue;
+			} else if (-1 == sendlen) {
+				perror("");
+				return -1;
+			} else if (0 == sendlen) {
+				continue;
+				// break;
+			}
+			totalsend += sendlen;
+
+			if (totalsend >= len) {
+				break;
+			}
+		}
+		return totalsend;
 	}
 
 	int Socket::recv(void *buf, int len, int flag) {
-		return ::recv(m_sock, buf, len, flag);
+		int totalrecv = 0;
+		while (true) {
+			int recvlen = read(m_sock, buf, len);
+			if (-1 == recvlen && EINTR == errno) {
+				continue;
+			} else if (-1 == recvlen) {
+				perror("");
+				return -1;
+			} else if (0 == recvlen) {
+				continue;
+			}
+			totalrecv += recvlen;
+
+			if (totalrecv >= len) {
+				break;
+			}
+		}
+		return totalrecv;
 	}
 
 	int Socket::setupSocket() {
