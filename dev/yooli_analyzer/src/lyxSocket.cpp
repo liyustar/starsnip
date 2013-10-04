@@ -23,13 +23,14 @@ namespace lyx {
 	int Socket::send(const void *buf, int len, int flag) {
 		int totalsend = 0;
 		while (totalsend < len) {
-			int sendlen = write(m_sock, buf, len);
-			if (-1 == sendlen && EINTR == errno) {
+			int sendlen = ::send(m_sock, buf, len - totalsend, flag);
+			if (sendlen < 0 && EINTR == errno) {
 				continue;
-			} else if (-1 == sendlen) {
+			} else if (sendlen < 0) {
 				perror("");
 				return -1;
 			} else if (0 == sendlen) {
+				// server closed?
 				continue;
 				// break;
 			}
@@ -45,14 +46,15 @@ namespace lyx {
 	int Socket::recv(void *buf, int len, int flag) {
 		int totalrecv = 0;
 		while (true) {
-			int recvlen = read(m_sock, buf, len);
-			if (-1 == recvlen && EINTR == errno) {
+			int recvlen = ::recv(m_sock, buf, len - totalrecv, flag);
+			if (recvlen < 0 && EINTR == errno) {
 				continue;
-			} else if (-1 == recvlen) {
+			} else if (recvlen < 0) {
 				perror("");
 				return -1;
 			} else if (0 == recvlen) {
-				continue;
+				// server closed
+				break;
 			}
 			totalrecv += recvlen;
 
