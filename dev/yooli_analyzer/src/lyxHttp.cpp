@@ -64,14 +64,25 @@ namespace lyx {
 	}
 
 	int Http::recvResponse(Socket sock, string &response) {
-		const int buflen = 1024 * 8;
-		char buf[buflen + 1];
+		string header;
+		int isFindHeader = false;
+		const int BUFLEN = 1024 * 8;
+		char buf[BUFLEN + 1];
 		int totalrecv = 0;
 		do {
-			int len = sock.rawRecv(buf, buflen);
+			int len = sock.rawRecv(buf, BUFLEN);
 			if (len > 0) {
 				buf[len] = '\0';
 				response += buf;
+				// find header
+				if (isFindHeader == false
+					&& response.find("\r\n\r\n") != string::npos) {
+					isFindHeader = true;
+					int pos = response.find("\r\n\r\n");
+					header = response.substr(0, pos + 4);
+					response = response.substr(pos + 4);
+					cout << header;
+				}
 			} else if (len == 0) {
 				break;
 			} else {
