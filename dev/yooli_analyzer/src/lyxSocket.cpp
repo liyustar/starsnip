@@ -43,6 +43,10 @@ namespace lyx {
 		return totalsend;
 	}
 
+	int Socket::rawRecv(void*buf, int len, int flag) {
+		return ::recv(m_sock, buf, len, flag);
+	}
+
 	int Socket::recv(void *buf, int len, int flag) {
 		int totalrecv = 0;
 		while (true) {

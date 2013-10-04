@@ -21,6 +21,7 @@ namespace lyx {
 		~Socket();
 		int send(const void *buf, int len, int flag = 0);
 		int recv(void *buf, int len, int flag = 0);
+		int rawRecv(void *buf, int len, int flag = 0);
 		int setupSocket();
 
 		void test();

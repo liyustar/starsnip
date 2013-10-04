@@ -54,7 +54,7 @@ namespace lyx {
 		// request.append("Accept-Charset: IOS-8859-1\r\n");
 		// request.append("Accept-Language: en;q=0.5\r\n");
 		// request.append("Accept-Encoding: gzip\r\n");
-		// request.append("Connection: Keep-Alive\r\n");
+		request.append("Connection: Close\r\n");	// not support keep-alive
 		request.append("\r\n");
 		return 0;
 	}
@@ -64,16 +64,23 @@ namespace lyx {
 	}
 
 	int Http::recvResponse(Socket sock, string &response) {
-		const int buflen = 200;
-		char buf[buflen];
-		int len = sock.recv(buf, buflen);
-		if (len != -1) {
-			buf[len] = '\0';
-			response = buf;
-		} else {
-			perror("");
-		}
-		cout << "recv len: " << len << endl;
+		const int buflen = 1024 * 8;
+		char buf[buflen + 1];
+		int totalrecv = 0;
+		do {
+			int len = sock.rawRecv(buf, buflen);
+			if (len > 0) {
+				buf[len] = '\0';
+				response += buf;
+			} else if (len == 0) {
+				break;
+			} else {
+				perror("");
+				break;
+			}
+			totalrecv += len;
+		} while(true);
+		cout << "recv len: " << totalrecv << endl;
 	}
 
 	int Http::getResponse(string &response) {
