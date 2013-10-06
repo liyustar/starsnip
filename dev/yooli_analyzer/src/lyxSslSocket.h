@@ -9,7 +9,8 @@ namespace lyx {
 
 	class SslSocket : public Socket{
 		private:
-		SSL
+		SSL *m_ssl;
+		SSL_CTX *m_ssl_ctx;
 
 		SslSocket();
 		void print();

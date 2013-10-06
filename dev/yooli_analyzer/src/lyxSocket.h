@@ -6,7 +6,7 @@
 namespace lyx {
 
 	class Socket {
-		private:
+		protected:
 		std::string m_host;
 		int m_port;
 		int m_sock;
