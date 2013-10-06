@@ -21,6 +21,8 @@ echo "star -- install vim"
 apt-get install vim
 echo "star -- install git"
 apt-get install git
+echo "star -- install g++"
+apt-get install g++
 
 apt-get install tree
 
