@@ -97,8 +97,8 @@ namespace lyx {
 		return totalrecv;
 	}
 
-	int SslSocket::setupSslSocket() {
-		setupSocket();
+	int SslSocket::setupSocket() {
+		Socket::setupSocket();
 
 		m_ssl_ctx = SSL_CTX_new(SSLv3_client_method());
 

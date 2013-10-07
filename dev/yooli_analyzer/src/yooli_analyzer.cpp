@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
 	// string yooliUrl = "yttp://www.yooli.com";
-	lyx::Url yooliUrl("http://www.yooli.com:80/");
+	lyx::Url yooliUrl("https://github.com:443/");
 	lyx::Http yooliHttp(yooliUrl);
 	yooliHttp.setMethod("GET");
 //	yooliHttp.setTimeout(8000);

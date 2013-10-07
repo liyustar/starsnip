@@ -1,6 +1,7 @@
 #include "lyxHttp.h"
 #include "lyxUrl.h"
 #include "lyxSocket.h"
+#include "lyxSslSocket.h"
 #include <unistd.h>
 #include <iostream>
 #include <string>
@@ -59,18 +60,18 @@ namespace lyx {
 		return 0;
 	}
 
-	int Http::sendRequest(Socket sock, const string &request) {
-		sock.send(request.c_str(), request.size());
+	int Http::sendRequest(Socket *psock, const string &request) {
+		psock->send(request.c_str(), request.size());
 	}
 
-	int Http::recvResponse(Socket sock, string &response) {
+	int Http::recvResponse(Socket *psock, string &response) {
 		string header;
 		int isFindHeader = false;
 		const int BUFLEN = 1024 * 8;
 		char buf[BUFLEN + 1];
 		int totalrecv = 0;
 		do {
-			int len = sock.rawRecv(buf, BUFLEN);
+			int len = psock->rawRecv(buf, BUFLEN);
 			if (len > 0) {
 				buf[len] = '\0';
 				response += buf;
@@ -98,11 +99,19 @@ namespace lyx {
 		// create http request
 		string request;
 		int res = 0; // result
-		Socket sock(m_url.getHostname(), m_url.getPort());
-		res = sock.setupSocket();
-		res = createRequest(request);
-		res = sendRequest(sock, request);
-		return recvResponse(sock, response);
+		if (443 == m_url.getPort()) {
+			SslSocket sock(m_url.getHostname(), m_url.getPort());
+			res = sock.setupSocket();
+			res = createRequest(request);
+			res = sendRequest(&sock, request);
+			return recvResponse(&sock, response);
+		} else {
+			Socket sock(m_url.getHostname(), m_url.getPort());
+			res = sock.setupSocket();
+			res = createRequest(request);
+			res = sendRequest(&sock, request);
+			return recvResponse(&sock, response);
+		}
 	}
 
 	// void test();

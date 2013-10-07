@@ -23,8 +23,8 @@ namespace lyx {
 
 		std::string getMethodStr() const;
 		int createRequest(std::string &request);
-		int sendRequest(Socket sock, const std::string &request);
-		int recvResponse(Socket sock, std::string &response);
+		int sendRequest(Socket *psock, const std::string &request);
+		int recvResponse(Socket *psock, std::string &response);
 
 		public:
 		Http();

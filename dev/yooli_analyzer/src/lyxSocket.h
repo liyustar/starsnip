@@ -18,11 +18,11 @@ namespace lyx {
 		// Socket(const Socket&);
 		Socket(const std::string &h, int p);
 		// Socket(const Socket& sockObj);
-		~Socket();
-		int send(const void *buf, int len, int flag = 0);
-		int recv(void *buf, int len, int flag = 0);
-		int rawRecv(void *buf, int len, int flag = 0);
-		int setupSocket();
+		virtual ~Socket();
+		virtual int send(const void *buf, int len, int flag = 0);
+		virtual int recv(void *buf, int len, int flag = 0);
+		virtual int rawRecv(void *buf, int len, int flag = 0);
+		virtual int setupSocket();
 
 		void test();
 	};
