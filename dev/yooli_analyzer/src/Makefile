@@ -1,7 +1,7 @@
 
 OPENSSLINC = /usr/local/ssl/include
 OPENSSLLIB = /usr/local/ssl/lib
-OPENSSLLINKS = -lcrypto -lssl
+OPENSSLLINKS =  -lssl -lcrypto -ldl
 
 # CPPFLAGS = -I${OPENSSLINC}
 CPPFLAGS = -L${OPENSSLLIB}
