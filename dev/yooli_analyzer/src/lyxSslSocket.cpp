@@ -1,11 +1,14 @@
 #include "lyxSslSocket.h"
-#include <unistd.h>
-#include <netdb.h>
-#include <errno.h>
 #include <string>
-#include <cstdio>
-#include <cstring>
-#include <cstdlib>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#ifdef __cplusplus
+}
+#endif
 
 using namespace std;
 
@@ -14,9 +17,9 @@ using namespace std;
 namespace lyx {
 
 	SslSocket::SslSocket(const string &h, int p) 
-		: Socket(h, p), m_ssl(NULL) m_ssl_ctx(NULL) {
+		: Socket(h, p), m_ssl(NULL), m_ssl_ctx(NULL) {
 			SSL_library_init();
-			OpenSSL_add_algorithms();
+			OpenSSL_add_ssl_algorithms();
 			SSL_load_error_strings();
 		}
 
@@ -36,11 +39,11 @@ namespace lyx {
 		// }
 	}
 
-	int Socket::send(const void *buf, int len, int flag) {
+	int SslSocket::send(const void *buf, int len, int flag) {
 		int totalsend = 0;
 		while (totalsend < len) {
 			int sendlen = SSL_write(m_ssl, buf, len - totalsend);
-			int ret = SSL_get_error(m_ssl, recvlen);
+			int ret = SSL_get_error(m_ssl, sendlen);
 			if (sendlen == 0) {
 				fprintf(stderr, "SSL_write none");
 				return -1;
@@ -60,17 +63,17 @@ namespace lyx {
 		return totalsend;
 	}
 
-	int Socket::rawRecv(void*buf, int len, int flag) {
-		int len, ret;
+	int SslSocket::rawRecv(void*buf, int len, int flag) {
+		int recvlen, ret;
 		do {
-			len = SSL_read(m_ssl, buf, len);
-			ret = SSL_get_error(m_ssl, len);
-		} while (len == -1 && ret == SSL_ERROR_WANT_READ);
+			recvlen = SSL_read(m_ssl, buf, len);
+			ret = SSL_get_error(m_ssl, recvlen);
+		} while (recvlen == -1 && ret == SSL_ERROR_WANT_READ);
 		
-		return len;
+		return recvlen;
 	}
 
-	int Socket::recv(void *buf, int len, int flag) {
+	int SslSocket::recv(void *buf, int len, int flag) {
 		int totalrecv = 0;
 		while (true) {
 			int recvlen = SSL_read(m_ssl, buf, len - totalrecv);
@@ -97,9 +100,7 @@ namespace lyx {
 	int SslSocket::setupSslSocket() {
 		setupSocket();
 
-		SSL_METHOD *ssl_method = NULL;
-		ssl_method = SSLv3_client_method();
-		m_ssl_ctx = SSL_CTX_new(ssl_method);
+		m_ssl_ctx = SSL_CTX_new(SSLv3_client_method());
 
 		m_ssl = SSL_new(m_ssl_ctx);
 		SSL_set_fd(m_ssl, m_sock);

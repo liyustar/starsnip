@@ -2,8 +2,16 @@
 #define LYXSSLSOCKET_H
 
 #include "lyxSocket.h"
-#include "openssl/ssl.h"
 #include <string>
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <openssl/ssl.h>
+#ifdef __cplusplus
+}
+#endif
 
 namespace lyx {
 
