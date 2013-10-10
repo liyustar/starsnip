@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
+#include <map>
+#include <utility>
 #include <cstdio>
 
 using namespace std;
@@ -31,6 +33,11 @@ namespace lyx {
 		}
 	}
 
+	int Http::addParam(const string key, const string val) {
+		// TODO: process '&' '?' etc.
+		m_params.insert(make_pair(key, val));
+	}
+
 	string Http::getMethodStr() const {
 		string methodStr;
 		switch (m_method) {
@@ -45,10 +52,35 @@ namespace lyx {
 		return methodStr;
 	}
 
+	string Http::getParamsStr() const {
+		string paramsStr;
+		map<string, string>::const_iterator iter = m_params.begin();
+		if (iter != m_params.end()) {
+			paramsStr.append(iter->first)
+				.append("=").append(iter->second);
+			iter++;
+		}
+		while (iter != m_params.end()) {
+			paramsStr.append("&").append(iter->first)
+				.append("=").append(iter->second);
+			iter++;
+		}
+		return paramsStr;
+	}
+
 	int Http::createRequest(std::string &request) {
+		string body, path;
+		if (m_method == METHOD_GET) {
+			path = m_url.getPath().append("?")
+						.append(getParamsStr());
+		}
+		else {
+			path = m_url.getPath();
+			body = getParamsStr();
+		}
 		request.clear();
 		request.append(getMethodStr()).append(" ");
-		request.append(m_url.getPath()).append(" HTTP/1.1\r\n");
+		request.append(path).append(" HTTP/1.1\r\n");
 		request.append("Host: ").append(m_url.getHostname()).append("\r\n");
 		// request.append("Accept: text/html,application/xml,application/xhtml+xml,text/html;*/*\r\n");
 		// request.append("User-Agent: LYX PROG/1.0\r\n");
@@ -57,6 +89,9 @@ namespace lyx {
 		// request.append("Accept-Encoding: gzip\r\n");
 		request.append("Connection: Close\r\n");	// not support keep-alive
 		request.append("\r\n");
+		if (!body.empty()) {
+			request.append(body);
+		}
 		return 0;
 	}
 

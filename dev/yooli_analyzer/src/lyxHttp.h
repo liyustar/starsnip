@@ -4,6 +4,7 @@
 #include "lyxUrl.h"
 #include "lyxSocket.h"
 #include <string>
+#include <map>
 
 namespace lyx {
 
@@ -17,11 +18,13 @@ namespace lyx {
 		private:
 		Url m_url;
 		METHOD_TYPE m_method;
+		std::map<std::string, std::string> m_params;
 
 		// Http(const Http&);
 		void print();
 
 		std::string getMethodStr() const;
+		std::string getParamsStr() const;
 		int createRequest(std::string &request);
 		int sendRequest(Socket *psock, const std::string &request);
 		int recvResponse(Socket *psock, std::string &response);
@@ -32,6 +35,7 @@ namespace lyx {
 		// Http(const Http& httpObj);
 		~Http();
 		int setMethod(std::string method);
+		int addParam(const std::string key, const std::string val);
 
 		// return status
 		int getResponse(std::string &response);
