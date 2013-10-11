@@ -6,7 +6,7 @@ OPENSSLLINKS =  -lssl -lcrypto -ldl
 CPPFLAGS = -I${OPENSSLINC} -g
 CPPLINKS = ${OPENSSLLINKS}
 
-OBJ = yooli_analyzer.o lyxUrl.o lyxSocket.o lyxHttp.o lyxSslSocket.o
+OBJ = yooli_analyzer.o lyxUrl.o lyxSocket.o lyxHttp.o lyxSslSocket.o lyxCookie.o
 
 all: yooli_analyzer
 
@@ -14,9 +14,10 @@ yooli_analyzer: ${OBJ}
 	g++ -L${OPENSSLLIB} -o $@ $^ ${CPPLINKS}
 
 lyxUrl.o: lyxUrl.h
-lyxHttp.o: lyxHttp.h lyxUrl.h lyxSocket.h lyxSslSocket.h
+lyxHttp.o: lyxHttp.h lyxUrl.h lyxSocket.h lyxSslSocket.h lyxCookie.h
 lyxSocket.o: lyxSocket.h
-lyxSslSocket.o: lyxSslSocket.cpp lyxSslSocket.h lyxSocket.h
+lyxSslSocket.o: lyxSslSocket.h lyxSocket.h
+lyxCookie.o: lyxCookie.h
 
 .PHONY: clean
 clean:
