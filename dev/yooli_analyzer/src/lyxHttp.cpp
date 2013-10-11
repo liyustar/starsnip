@@ -52,7 +52,7 @@ namespace lyx {
 			case METHOD_POST:
 				methodStr = "POST";
 				break;
-			case METHOD_GET:
+			case METHOD_GET: /* no break */
 			default:
 				methodStr = "GET";
 				break;
@@ -112,8 +112,7 @@ namespace lyx {
 		psock->send(request.c_str(), request.size());
 	}
 
-	int Http::recvResponse(Socket *psock, string &response) {
-		string header;
+	int Http::recvResponse(Socket *psock, string &header, string &response) {
 		int isFindHeader = false;
 		const int BUFLEN = 1024 * 8;
 		char buf[BUFLEN + 1];
@@ -146,19 +145,22 @@ namespace lyx {
 	int Http::getResponse(string &response) {
 		// create http request
 		string request;
+		string header;
 		int res = 0; // result
 		if (443 == m_url.getPort()) {
 			SslSocket sock(m_url.getHostname(), m_url.getPort());
 			res = sock.setupSocket();
 			res = createRequest(request);
 			res = sendRequest(&sock, request);
-			return recvResponse(&sock, response);
+			res = recvResponse(&sock, header, response);
+			return res;
 		} else {
 			Socket sock(m_url.getHostname(), m_url.getPort());
 			res = sock.setupSocket();
 			res = createRequest(request);
 			res = sendRequest(&sock, request);
-			return recvResponse(&sock, response);
+			res = recvResponse(&sock, header, response);
+			return res;
 		}
 	}
 
