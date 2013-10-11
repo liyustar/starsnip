@@ -137,7 +137,7 @@ func SetTitle()
 
     if &filetype == 'cpp'
 
-        call append(line(".")+6, "#include<iostream>")
+        call append(line(".")+6, "#include <iostream>")
 
         call append(line(".")+7, "using namespace std;")
 
@@ -147,7 +147,7 @@ func SetTitle()
 
     if &filetype == 'c'
 
-        call append(line(".")+6, "#include<stdio.h>")
+        call append(line(".")+6, "#include <stdio.h>")
 
         call append(line(".")+7, "")
 
