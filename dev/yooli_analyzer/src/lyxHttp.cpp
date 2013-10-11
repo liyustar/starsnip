@@ -12,6 +12,24 @@
 
 using namespace std;
 
+typedef enum HTTP_MSG {
+	HTTP_MSG_CONTENTLENGTH,
+}HTTP_MSG;
+
+typedef void (*HTTP_MSG_METHOD)(string);
+
+typedef struct HeadProccess {
+	HTTP_MSG msg;
+	string msgStr;
+	HTTP_MSG_METHOD msgMethod;
+}HeadProccess;
+
+HeadProccess headProc[] = {
+	{HTTP_MSG_CONTENTLENGTH, "Content-Length", NULL},
+	// {HTTP_MSG_SETCOOKIE, "Set-Cookie", lyx::Cookie::parseSetCookie},
+};
+
+
 static string myitoa(int n) {
 	const int INTBUFSIZE = 12;
 	char buf[INTBUFSIZE] = {0};
