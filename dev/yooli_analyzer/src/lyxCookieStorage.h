@@ -24,12 +24,7 @@ namespace lyx {
 			CookieStorage() { }
 
 		public:
-			static CookieStorageInstence getCookieStorageInstence() {
-				if (m_cookiestorage == NULL) {
-					m_cookiestorage = new CookieStorage();
-				}
-				return m_cookiestorage;
-			}
+			static CookieStorageInstence getCookieStorageInstence();
 			int addCookie(Url url, Cookie cookie);
 
 	};

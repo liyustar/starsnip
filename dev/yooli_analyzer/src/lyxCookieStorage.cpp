@@ -15,12 +15,14 @@ using namespace std;
 
 namespace lyx {
 
-//	static CookieStorageInstence CookieStorage::getCookieStorageInstence() {
-//		if (m_cookiestorage == NULL) {
-//			m_cookiestorage = new CookieStorage();
-//		}
-//		return m_cookiestorage;
-//	}
+	CookieStorageInstence CookieStorage::m_cookiestorage;
+
+	CookieStorageInstence CookieStorage::getCookieStorageInstence() {
+		if (m_cookiestorage == NULL) {
+			m_cookiestorage = new CookieStorage();
+		}
+		return m_cookiestorage;
+	}
 
 	int  CookieStorage::addCookie(Url url, Cookie cookie) {
 		// TODO: find url in map, add cookie in set;

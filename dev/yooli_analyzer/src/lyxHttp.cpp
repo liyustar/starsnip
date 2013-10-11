@@ -2,6 +2,7 @@
 #include "lyxUrl.h"
 #include "lyxSocket.h"
 #include "lyxSslSocket.h"
+#include "lyxCookieStorage.h"
 #include <unistd.h>
 #include <iostream>
 #include <string>
@@ -142,10 +143,16 @@ namespace lyx {
 		cout << "recv len: " << totalrecv << endl;
 	}
 
+	int Http::analyzeResponseHeader(const string &header, int &status) {
+		// TODO: add Cookie to CookieStorage;
+		CookieStorageInstence csInstence = CookieStorage::getCookieStorageInstence();
+	}
+
 	int Http::getResponse(string &response) {
 		// create http request
 		string request;
 		string header;
+		int status = 0;
 		int res = 0; // result
 		if (443 == m_url.getPort()) {
 			SslSocket sock(m_url.getHostname(), m_url.getPort());
@@ -153,6 +160,7 @@ namespace lyx {
 			res = createRequest(request);
 			res = sendRequest(&sock, request);
 			res = recvResponse(&sock, header, response);
+			res = analyzeResponseHeader(header, status);
 			return res;
 		} else {
 			Socket sock(m_url.getHostname(), m_url.getPort());
@@ -160,6 +168,7 @@ namespace lyx {
 			res = createRequest(request);
 			res = sendRequest(&sock, request);
 			res = recvResponse(&sock, header, response);
+			res = analyzeResponseHeader(header, status);
 			return res;
 		}
 	}
