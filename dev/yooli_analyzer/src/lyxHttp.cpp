@@ -11,6 +11,14 @@
 
 using namespace std;
 
+static string myitoa(int n) {
+	const int INTBUFSIZE = 12;
+	char buf[INTBUFSIZE] = {0};
+	sprintf(buf, "%d", n);
+	string num = buf;
+	return num;
+}
+
 namespace lyx {
 
 	Http::Http() : m_url("") { }
@@ -82,6 +90,11 @@ namespace lyx {
 		request.append(getMethodStr()).append(" ");
 		request.append(path).append(" HTTP/1.1\r\n");
 		request.append("Host: ").append(m_url.getHostname()).append("\r\n");
+
+		if (!body.empty()) {
+			request.append("Content-Length: ")
+				.append(myitoa(body.size())).append("\r\n");
+		}
 		// request.append("Accept: text/html,application/xml,application/xhtml+xml,text/html;*/*\r\n");
 		// request.append("User-Agent: LYX PROG/1.0\r\n");
 		// request.append("Accept-Charset: IOS-8859-1\r\n");
