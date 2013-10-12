@@ -164,6 +164,25 @@ namespace lyx {
 	int Http::analyzeResponseHeader(const string &header, int &status) {
 		// TODO: add Cookie to CookieStorage;
 		CookieStorageInstence csInstence = CookieStorage::getCookieStorageInstence();
+		string curLine;
+		for (int pos = 0, end = 0;
+				end = header.find("\r\n", pos);
+				pos = end + 2) {
+			curLine = header.substr(pos, end - pos);
+			if (curLine.compare("\r\n") == 0) {
+				break;
+			}
+			if (pos == 0) {
+				// first line
+				// eg: 200 OK HTTP/1.1
+				status = analyseHeaderFirst(curLine);
+			}
+			else {
+				// other line
+				// eg: Content-Line: 56\r\n
+				analyseHeaderLine(curLine);
+			}
+		}
 	}
 
 	int Http::getResponse(string &response) {
