@@ -1,3 +1,5 @@
+// !!! need call Http::initHttpAlgorithms();
+//
 #ifndef LYXHTTP_H
 #define LYXHTTP_H
 

@@ -27,9 +27,9 @@ namespace lyx {
 	map<Http::TOKEN_TYPE, Http::TOKEN_METHOD> Http::tokenMethodMap;
 
 	static Http::HeaderProcess headerProc[] = {
-		{Http::TOKEN_CONTENT_LENGTH, "Content-Length", Http::parseContentLength},
-		{Http::TOKEN_SET_COOKIE, "Set-Cookie", Http::parseSetCookie},
-		{Http::TOKEN_UNKNOW, NULL, NULL }
+		{Http::TOKEN_CONTENT_LENGTH,	"Content-Length",	Http::parseContentLength},
+		{Http::TOKEN_SET_COOKIE,		"Set-Cookie",		Http::parseSetCookie},
+		{Http::TOKEN_UNKNOW, "", NULL }
 	};
 
 	Http::Http() : m_url("") { }
@@ -41,7 +41,11 @@ namespace lyx {
 	Http::~Http() {}
 
 	int Http::initHttpAlgorithms() {
+		static int hasInit = 0;
+		if (hasInit == 1) return 0;
+		hasInit = 1;
 		loadHeaderTokenMap();
+		return 0;
 	}
 
 	int Http::setMethod(string methodStr) {
@@ -217,7 +221,7 @@ namespace lyx {
 			}
 			if (pos == 0) {
 				// first line
-				// eg: 200 OK HTTP/1.1
+				// eg: HTTP/1.1 200 OK
 				status = analyseHeaderFirstLine(curLine);
 			}
 			else {
@@ -272,7 +276,7 @@ namespace lyx {
 
 	int Http::parseSetCookie(HttpCtx ctx, string str) {
 		// TODO
-		cout << "Set-Cookie: haha" << endl;
+		cout << "............Set-Cookie: " << str << endl;
 	}
 
 	// void test();
