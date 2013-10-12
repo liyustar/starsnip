@@ -203,8 +203,8 @@ namespace lyx {
 		// skip ' '
 		pos = end;
 		pos = line.find_first_not_of(" :", pos);
-		end = line.find_last_not_of(" \r\n", pos);
-		content = line.substr(pos, end - pos);
+		end = line.find_last_not_of(" \r\n", line.size());
+		content = line.substr(pos, end + 1 - pos);
 		processHeaderLine(token, content);
 	}
 
@@ -216,7 +216,8 @@ namespace lyx {
 				end = header.find("\r\n", pos);
 				pos = end + 2) {
 			curLine = header.substr(pos, end - pos);
-			if (curLine.compare("\r\n") == 0) {
+			// if (curLine.compare("\r\n") == 0) {
+			if (end == pos) {
 				break;
 			}
 			if (pos == 0) {
