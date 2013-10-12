@@ -29,6 +29,9 @@ namespace lyx {
 		int sendRequest(Socket *psock, const std::string &request);
 		int recvResponse(Socket *psock, std::string &header, std::string &response);
 		int analyzeResponseHeader(const std::string &header, int &status);
+		int processHeaderLine(const std::string &token, const std::string &content);
+		int analyseHeaderFirstLine(const std::string &firstLine);
+		int analyseHeaderLine(const std::string &line);
 
 		public:
 		Http();

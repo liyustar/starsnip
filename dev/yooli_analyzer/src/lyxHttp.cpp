@@ -161,6 +161,41 @@ namespace lyx {
 		cout << "recv len: " << totalrecv << endl;
 	}
 
+	int Http::processHeaderLine(const string &token, const string &content) {
+
+	}
+
+	int Http::analyseHeaderFirstLine(const string &firstLine) {
+		int pos = 0, end = 0, status = 0;
+		string token;
+		end = firstLine.find_first_not_of(" ", pos);
+		token = firstLine.substr(pos, end - pos); // HTTP version
+		pos = end + 1;
+		end = firstLine.find_first_not_of(" ", pos);
+		token = firstLine.substr(pos, end - pos); // response code
+		status = atoi(token.c_str());
+		pos = end + 1;
+		end = firstLine.find_first_not_of("\r\n", pos);
+		token = firstLine.substr(pos, end - pos); // response discription
+		return status;
+	}
+
+	int Http::analyseHeaderLine(const string &line) {
+		int pos = 0, end = 0;
+		string token, content;
+		end = line.find(":");
+		if (string::npos == end) {
+			return -1;
+		}
+		token = line.substr(pos, end - pos);
+		// skip ' '
+		pos = end;
+		pos = line.find_first_not_of(" :", pos);
+		end = line.find_last_not_of(" \r\n", pos);
+		content = line.substr(pos, end - pos);
+		processHeaderLine(token, content);
+	}
+
 	int Http::analyzeResponseHeader(const string &header, int &status) {
 		// TODO: add Cookie to CookieStorage;
 		CookieStorageInstence csInstence = CookieStorage::getCookieStorageInstence();
@@ -175,7 +210,7 @@ namespace lyx {
 			if (pos == 0) {
 				// first line
 				// eg: 200 OK HTTP/1.1
-				status = analyseHeaderFirst(curLine);
+				status = analyseHeaderFirstLine(curLine);
 			}
 			else {
 				// other line
