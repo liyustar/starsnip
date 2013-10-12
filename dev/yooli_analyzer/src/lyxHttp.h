@@ -8,6 +8,8 @@
 
 namespace lyx {
 
+	typedef class Http * HttpCtx;
+
 	class Http {
 
 		public:
@@ -23,19 +25,22 @@ namespace lyx {
 				TOKEN_SET_COOKIE,
 			}TOKEN_TYPE;
 
-			typedef void (*TOKEN_METHOD)(std::string);
+			typedef int (*TOKEN_METHOD)(HttpCtx, std::string);
 
 			typedef struct {
 				TOKEN_TYPE tok;
 				std::string tokStr;
 				TOKEN_METHOD tokMethod;
-			}HeadProcess;
+			}HeaderProcess;
 
 		public:
 			Http();
 			Http(Url url);
 			// Http(const Http& httpObj);
 			~Http();
+
+			static int initHttpAlgorithms();
+
 			int setMethod(std::string method);
 			int addParam(const std::string key, const std::string val);
 
@@ -44,10 +49,16 @@ namespace lyx {
 
 			void test();
 
+			// parse header line
+			static int parseContentLength(HttpCtx, std::string);
+			static int parseSetCookie(HttpCtx, std::string);
+
 		private:
 			Url m_url;
 			METHOD_TYPE m_method;
 			std::map<std::string, std::string> m_params;
+			static std::map<std::string, TOKEN_TYPE> headerTokenMap;
+			static std::map<TOKEN_TYPE, TOKEN_METHOD> tokenMethodMap;
 
 			// Http(const Http&);
 			void print();
@@ -62,6 +73,8 @@ namespace lyx {
 			int analyseHeaderFirstLine(const std::string &firstLine);
 			int analyseHeaderLine(const std::string &line);
 
+			// init function
+			static void loadHeaderTokenMap();
 	};
 }
 

@@ -23,9 +23,13 @@ static string myitoa(int n) {
 
 namespace lyx {
 
-	Http::HeadProcess headProc[] = {
-		{Http::TOKEN_CONTENT_LENGTH, "Content-Length", NULL},
-		// {HTTP_MSG_SETCOOKIE, "Set-Cookie", lyx::Cookie::parseSetCookie},
+	map<string, Http::TOKEN_TYPE> Http::headerTokenMap;
+	map<Http::TOKEN_TYPE, Http::TOKEN_METHOD> Http::tokenMethodMap;
+
+	static Http::HeaderProcess headerProc[] = {
+		{Http::TOKEN_CONTENT_LENGTH, "Content-Length", Http::parseContentLength},
+		{Http::TOKEN_SET_COOKIE, "Set-Cookie", Http::parseSetCookie},
+		{Http::TOKEN_UNKNOW, NULL, NULL }
 	};
 
 	Http::Http() : m_url("") { }
@@ -35,6 +39,10 @@ namespace lyx {
 	// void print();
 
 	Http::~Http() {}
+
+	int Http::initHttpAlgorithms() {
+		loadHeaderTokenMap();
+	}
 
 	int Http::setMethod(string methodStr) {
 		if (methodStr.compare("GET") == 0
@@ -149,8 +157,20 @@ namespace lyx {
 		cout << "recv len: " << totalrecv << endl;
 	}
 
-	int Http::processHeaderLine(const string &token, const string &content) {
-
+	int Http::processHeaderLine(const string &tokStr, const string &content) {
+		TOKEN_TYPE token;
+		TOKEN_METHOD method;
+		map<string, TOKEN_TYPE>::iterator tokIter = headerTokenMap.find(tokStr);
+		if (tokIter == headerTokenMap.end()) {
+			return -1;
+		}
+		token = tokIter->second;
+		map<TOKEN_TYPE, TOKEN_METHOD>::iterator methIter = tokenMethodMap.find(token);
+		if (methIter == tokenMethodMap.end()) {
+			return -1;
+		}
+		method = methIter->second;
+		return method(this, content);
 	}
 
 	int Http::analyseHeaderFirstLine(const string &firstLine) {
@@ -231,6 +251,28 @@ namespace lyx {
 			res = analyzeResponseHeader(header, status);
 			return res;
 		}
+	}
+
+	// init function
+	void Http::loadHeaderTokenMap() {
+		for (int i = 0; headerProc[i].tok != TOKEN_UNKNOW; i++) {
+			headerTokenMap.insert(make_pair(headerProc[i].tokStr,
+											headerProc[i].tok));
+			tokenMethodMap.insert(make_pair(headerProc[i].tok,
+											headerProc[i].tokMethod));
+		}
+	}
+
+	// parse header line
+	int Http::parseContentLength(HttpCtx ctx, string str) {
+		// TODO
+		int len = atoi(str.c_str());
+		cout << "Content-Length: " << len << endl;
+	}
+
+	int Http::parseSetCookie(HttpCtx ctx, string str) {
+		// TODO
+		cout << "Set-Cookie: haha" << endl;
 	}
 
 	// void test();
