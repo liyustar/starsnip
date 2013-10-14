@@ -8,30 +8,39 @@
 #ifndef LYXCOOKIE_H
 #define LYXCOOKIE_H
 
+#include "lyxUrl.h"
 #include <string>
 
 namespace lyx {
 
 	class Cookie {
-		private:
-		Cookie();
-		std::string m_key;
-		std::string m_val;
-		std::string m_path;
-
-		// Cookie(const Cookie&);
-		void print();
-
 		public:
-		Cookie(std::string key, std::string val);
-		// Cookie(const Cookie& cookieObj);
-		~Cookie();
+			Cookie(std::string name, std::string val, std::string domain,
+					std::string path = "/", int secure = 0);
+			// Cookie(const Cookie& cookieObj);
+			~Cookie();
 
-		// getter
-		std::string getCookieStr() const;
-		std::string getPath() const;
+			static Cookie parseSetCookieString(Url url, const std::string &setCookieStr);
 
-		void test();
+			// getter
+			std::string getCookieStr() const; // name=val
+			std::string getPath() const;
+			std::string getDomain() const;
+			int getSecure() const;
+
+			void test();
+
+		private:
+			Cookie();
+			std::string m_name;
+			std::string m_val;
+			std::string m_domain;
+			std::string m_path;
+			int m_secure;
+
+			// Cookie(const Cookie&);
+			void print();
+
 	};
 }
 

@@ -148,7 +148,7 @@ namespace lyx {
 					int pos = response.find("\r\n\r\n");
 					header = response.substr(0, pos + 4);
 					response = response.substr(pos + 4);
-					cout << header;
+					// cout << header;
 				}
 			} else if (len == 0) {
 				break;
@@ -158,7 +158,7 @@ namespace lyx {
 			}
 			totalrecv += len;
 		} while(true);
-		cout << "recv len: " << totalrecv << endl;
+		// cout << "recv len: " << totalrecv << endl;
 	}
 
 	int Http::processHeaderLine(const string &tokStr, const string &content) {
@@ -203,8 +203,8 @@ namespace lyx {
 		// skip ' '
 		pos = end;
 		pos = line.find_first_not_of(" :", pos);
-		end = line.find_last_not_of(" \r\n", line.size());
-		content = line.substr(pos, end + 1 - pos);
+		end = 1 + line.find_last_not_of(" \r\n", line.size());
+		content = line.substr(pos, end - pos);
 		processHeaderLine(token, content);
 	}
 
