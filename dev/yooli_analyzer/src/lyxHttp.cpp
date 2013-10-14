@@ -209,8 +209,6 @@ namespace lyx {
 	}
 
 	int Http::analyzeResponseHeader(const string &header, int &status) {
-		// TODO: add Cookie to CookieStorage;
-		CookieStorageInstence csInstence = CookieStorage::getCookieStorageInstence();
 		string curLine;
 		for (int pos = 0, end = 0;
 				end = header.find("\r\n", pos);
@@ -275,11 +273,17 @@ namespace lyx {
 		cout << "Content-Length: " << len << endl;
 	}
 
-	int Http::parseSetCookie(HttpCtx ctx, string str) {
+	int Http::parseSetCookie(HttpCtx ctx, string setCookiestr) {
 		// TODO
-		cout << "............Set-Cookie: " << str << endl;
+		CookieStorageInstence csInstence = CookieStorage::getCookieStorageInstence();
+		Cookie cookie = Cookie::parseSetCookieString(ctx->getUrl(), setCookiestr);
+		csInstence->addCookie(cookie);
 	}
 
 	// void test();
+
+	Url Http::getUrl() const {
+		return m_url;
+	}
 }
 

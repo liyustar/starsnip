@@ -24,7 +24,7 @@ namespace lyx {
 		return m_cookiestorage;
 	}
 
-	int  CookieStorage::addCookie(Url url, Cookie cookie) {
+	int  CookieStorage::addCookie(Cookie cookie) {
 		// TODO: find url in map, add cookie in set;
 	}
 

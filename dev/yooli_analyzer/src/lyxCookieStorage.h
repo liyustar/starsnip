@@ -25,7 +25,7 @@ namespace lyx {
 
 		public:
 			static CookieStorageInstence getCookieStorageInstence();
-			int addCookie(Url url, Cookie cookie);
+			int addCookie(Cookie cookie);
 
 	};
 }

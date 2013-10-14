@@ -39,5 +39,9 @@ namespace lyx {
 		return m_path;
 	}
 
+	Cookie Cookie::parseSetCookieString(Url url, const std::string &setCookieStr) {
+
+	}
+
 	void Cookie::test() { }
 }

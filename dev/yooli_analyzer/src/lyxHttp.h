@@ -55,6 +55,9 @@ namespace lyx {
 			static int parseContentLength(HttpCtx, std::string);
 			static int parseSetCookie(HttpCtx, std::string);
 
+			// getter
+			Url getUrl() const;
+
 		private:
 			Url m_url;
 			METHOD_TYPE m_method;
