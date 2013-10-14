@@ -39,8 +39,36 @@ namespace lyx {
 		return m_path;
 	}
 
-	Cookie Cookie::parseSetCookieString(Url url, const std::string &setCookieStr) {
+	Cookie Cookie::parseSetCookieString(Url url, const string &setCookieStr) {
+		string name, val, domain, path;
+		int pos = 0, end = 0, secure = 0;
+		pos = setCookieStr.find_first_not_of(" ");
+		end = setCookieStr.find("=", pos);
+		name = setCookieStr.substr(pos, end - pos);
+		pos = end + 1;
+		end = setCookieStr.find_first_of(" ;", pos);
+		val = setCookieStr.substr(pos, end - pos);
 
+		pos = setCookieStr.find("path=");
+		if (string::npos != pos) {
+			pos += 5;
+			end = setCookieStr.find_first_of(" ;", pos);
+			path = setCookieStr.substr(pos, end - pos);
+		}
+
+		pos = setCookieStr.find("domain=");
+		if (string::npos != pos) {
+			pos += 7;
+			end = setCookieStr.find_first_of(" ;", pos);
+			path = setCookieStr.substr(pos, end - pos);
+		}
+
+		pos = setCookieStr.find(" secure;");
+		if (string::npos != pos) {
+			secure = 1;
+		}
+
+		return Cookie(name, val, domain, path, secure);
 	}
 
 	void Cookie::test() { }
