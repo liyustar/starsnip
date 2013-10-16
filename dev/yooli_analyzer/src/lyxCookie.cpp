@@ -30,6 +30,12 @@ namespace lyx {
 	}
 
 	// getter
+	string Cookie::getName() const {
+		return m_name;
+	}
+	string Cookie::getVal() const {
+		return m_val;
+	}
 	string Cookie::getCookieStr() const {
 		string cookieStr;
 		cookieStr.append(m_name).append("=").append(m_val);
@@ -37,6 +43,9 @@ namespace lyx {
 	}
 	string Cookie::getPath() const {
 		return m_path;
+	}
+	string Cookie::getDomain() const {
+		return m_domain;
 	}
 
 	Cookie Cookie::parseSetCookieString(Url url, const string &setCookieStr) {
@@ -56,11 +65,14 @@ namespace lyx {
 			path = setCookieStr.substr(pos, end - pos);
 		}
 
-		pos = setCookieStr.find("domain=");
+		// pos = setCookieStr.find("domain=");
+		pos = string::npos;	// 因为没有对domain的比较方法，以后会更换
 		if (string::npos != pos) {
 			pos += 7;
 			end = setCookieStr.find_first_of(" ;", pos);
 			path = setCookieStr.substr(pos, end - pos);
+		} else {
+			path = url.getHostname();
 		}
 
 		pos = setCookieStr.find(" secure;");
@@ -69,6 +81,20 @@ namespace lyx {
 		}
 
 		return Cookie(name, val, domain, path, secure);
+	}
+
+	bool Cookie::operator < (const Cookie &cookie) const {
+		if (m_domain.compare(cookie.getDomain()) == -1) {
+			return false;
+		}
+		return true;
+	}
+
+	bool Cookie::operator == (const Cookie &cookie) const {
+		if (m_domain.compare(cookie.getDomain()) == 0
+				&& m_name.compare(cookie.getName()) == 0)
+			return true;
+		return false;
 	}
 
 	void Cookie::test() { }

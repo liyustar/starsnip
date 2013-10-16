@@ -16,17 +16,19 @@
 namespace lyx {
 
 	typedef class CookieStorage * CookieStorageInstence;
+	typedef std::set<Cookie> CookieSet;
+	typedef CookieSet::iterator CookieSetIter;
 
 	class CookieStorage {
 		private:
 			static CookieStorageInstence m_cookiestorage;
-			std::map<Url, std::set<Cookie> > m_cookieSet;
+			CookieSet m_cookieSet;
 			CookieStorage() { }
 
 		public:
 			static CookieStorageInstence getCookieStorageInstence();
 			int addCookie(Cookie cookie);
-
+			CookieSet getCookiesByUrl(Url url) const;
 	};
 }
 

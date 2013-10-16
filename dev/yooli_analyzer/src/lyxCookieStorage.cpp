@@ -24,8 +24,27 @@ namespace lyx {
 		return m_cookiestorage;
 	}
 
-	int  CookieStorage::addCookie(Cookie cookie) {
+	int CookieStorage::addCookie(Cookie cookie) {
 		// TODO: find url in map, add cookie in set;
+		CookieSetIter iter = m_cookieSet.begin();
+		for ( ; iter != m_cookieSet.end(); iter++) {
+			if (cookie == *iter) {
+				m_cookieSet.erase(iter);
+				break;
+			}
+		}
+		m_cookieSet.insert(cookie);
+	}
+
+	CookieSet CookieStorage::getCookiesByUrl(Url url) const {
+		CookieSet cookies;
+		CookieSet::iterator iter = m_cookieSet.begin();
+		for ( ; iter != m_cookieSet.end(); iter++) {
+			if (iter->getDomain().compare(url.getHostname()) == 0) {
+				cookies.insert(*iter);
+			}
+		}
+		return cookies;
 	}
 
 }

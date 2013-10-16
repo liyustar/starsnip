@@ -23,10 +23,15 @@ namespace lyx {
 			static Cookie parseSetCookieString(Url url, const std::string &setCookieStr);
 
 			// getter
+			std::string getName() const;
+			std::string getVal() const;
 			std::string getCookieStr() const; // name=val
 			std::string getPath() const;
 			std::string getDomain() const;
 			int getSecure() const;
+
+			bool operator < (const Cookie &cookie) const;
+			bool operator == (const Cookie &cookie) const;
 
 			void test();
 
