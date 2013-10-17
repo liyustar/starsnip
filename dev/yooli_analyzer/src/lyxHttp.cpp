@@ -248,6 +248,7 @@ namespace lyx {
 		res = sendRequest(sock, request);
 		res = recvResponse(sock, header, response);
 		res = analyzeResponseHeader(header, status);
+		test();
 		delete sock;
 		return res;
 	}
@@ -276,10 +277,18 @@ namespace lyx {
 		csInstence->addCookie(cookie);
 	}
 
-	// void test();
-
 	Url Http::getUrl() const {
 		return m_url;
+	}
+
+	void Http::test() {
+		CookieStorageInstence csInstence = CookieStorage::getCookieStorageInstence();
+		CookieSet cookies = csInstence->getCookiesByUrl(m_url);
+		CookieSetIter iter = cookies.begin();
+		for ( ; iter != cookies.end(); iter++) {
+			cout << iter->getName() << "=" << iter->getVal() << endl;
+		}
+		cout << endl;
 	}
 }
 

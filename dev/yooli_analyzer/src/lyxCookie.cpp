@@ -70,9 +70,9 @@ namespace lyx {
 		if (string::npos != pos) {
 			pos += 7;
 			end = setCookieStr.find_first_of(" ;", pos);
-			path = setCookieStr.substr(pos, end - pos);
+			domain = setCookieStr.substr(pos, end - pos);
 		} else {
-			path = url.getHostname();
+			domain = url.getHostname();
 		}
 
 		pos = setCookieStr.find(" secure;");
