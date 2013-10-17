@@ -70,6 +70,7 @@ namespace lyx {
 
 			std::string getMethodStr() const;
 			std::string getParamsStr() const;
+			std::string getCookiesStr() const;
 			int createRequest(std::string &request);
 			int sendRequest(Socket *psock, const std::string &request);
 			int recvResponse(Socket *psock, std::string &header, std::string &response);

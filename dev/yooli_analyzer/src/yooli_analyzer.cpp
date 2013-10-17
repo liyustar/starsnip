@@ -18,10 +18,22 @@ int main() {
 
 	string response;
 	yooliHttp.getResponse(response);
-	cout << " ******************* \n RESPONSE \n *******************" << endl;
-	cout << response;
+	// cout << " ******************* \n RESPONSE \n *******************" << endl;
+	// cout << response;
 	// string response = yooliHttp.getResponse();
 	// cout << response;
+
+	lyx::Url loginUrl("https://www.yooli.com:443/secure/login.action");
+	lyx::Http::initHttpAlgorithms();
+	lyx::Http loginHttp(loginUrl);
+	loginHttp.setMethod("POST");
+	loginHttp.addParam("nickname", "XXX");
+	loginHttp.addParam("password", "YYY");
+	
+	response.clear();
+	loginHttp.getResponse(response);
+	cout << response;
+
 	return 0;
 }
 

@@ -95,6 +95,20 @@ namespace lyx {
 		return paramsStr;
 	}
 
+	string Http::getCookiesStr() const {
+		CookieStorageInstence csInstence = CookieStorage::getCookieStorageInstence();
+		CookieSet cookieSet = csInstence->getCookiesByUrl(m_url);
+		CookieSetIter iter = cookieSet.begin();
+		string cookies;
+		cookies.append("Cookie:");
+		for ( ; iter != cookieSet.end(); iter++) {
+			cookies.append(" ").append(iter->getName());
+			cookies.append("=").append(iter->getVal()).append(";");
+		}
+		cookies.append("\r\n");
+		return cookies;
+	}
+
 	int Http::createRequest(std::string &request) {
 		string body, path;
 		if (m_method == METHOD_GET) {
@@ -109,6 +123,8 @@ namespace lyx {
 		request.append(getMethodStr()).append(" ");
 		request.append(path).append(" HTTP/1.1\r\n");
 		request.append("Host: ").append(m_url.getHostname()).append("\r\n");
+
+		request.append(getCookiesStr());
 
 		if (!body.empty()) {
 			request.append("Content-Length: ")
@@ -248,6 +264,7 @@ namespace lyx {
 		res = sendRequest(sock, request);
 		res = recvResponse(sock, header, response);
 		res = analyzeResponseHeader(header, status);
+		cout << header << endl;
 		test();
 		delete sock;
 		return res;
