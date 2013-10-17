@@ -237,23 +237,19 @@ namespace lyx {
 		string header;
 		int status = 0;
 		int res = 0; // result
+		Socket *sock = NULL;
 		if (443 == m_url.getPort()) {
-			SslSocket sock(m_url.getHostname(), m_url.getPort());
-			res = sock.setupSocket();
-			res = createRequest(request);
-			res = sendRequest(&sock, request);
-			res = recvResponse(&sock, header, response);
-			res = analyzeResponseHeader(header, status);
-			return res;
+			sock = new SslSocket(m_url.getHostname(), m_url.getPort());
 		} else {
-			Socket sock(m_url.getHostname(), m_url.getPort());
-			res = sock.setupSocket();
-			res = createRequest(request);
-			res = sendRequest(&sock, request);
-			res = recvResponse(&sock, header, response);
-			res = analyzeResponseHeader(header, status);
-			return res;
+			sock = new Socket(m_url.getHostname(), m_url.getPort());
 		}
+		res = sock->setupSocket();
+		res = createRequest(request);
+		res = sendRequest(sock, request);
+		res = recvResponse(sock, header, response);
+		res = analyzeResponseHeader(header, status);
+		delete sock;
+		return res;
 	}
 
 	// init function
