@@ -36,8 +36,6 @@ namespace lyx {
 
 	Http::Http(Url url) : m_url(url) { }
 
-	// void print();
-
 	Http::~Http() {}
 
 	int Http::initHttpAlgorithms() {
@@ -63,6 +61,11 @@ namespace lyx {
 	int Http::addParam(const string key, const string val) {
 		// TODO: process '&' '?' etc.
 		m_params.push_back(make_pair(key, val));
+	}
+
+	int Http::addHeader(const string title, const string content) {
+		// TODO: process '&' '?' etc.
+		m_headers.push_back(make_pair(title, content));
 	}
 
 	string Http::getMethodStr() const {
@@ -94,6 +97,19 @@ namespace lyx {
 		return paramsStr;
 	}
 
+	string Http::getHeadersStr() const {
+		string headersStr;
+		int len = m_headers.size();
+		for (int i = 0; i < len; i++) {
+			const Header &header = m_headers[i];
+			headersStr.append(header.first);
+			headersStr.append(": ");
+			headersStr.append(header.second);
+			headersStr.append("\r\n");
+		}
+		return headersStr;
+	}
+
 	string Http::getCookiesStr() const {
 		CookieStorageInstence csInstence = CookieStorage::getCookieStorageInstence();
 		CookieSet cookieSet = csInstence->getCookiesByUrl(m_url);
@@ -113,13 +129,17 @@ namespace lyx {
 	int Http::createRequest(std::string &request) {
 		string body, path;
 		string cookies = getCookiesStr();
+		string headers = getHeadersStr();
+		string params = getParamsStr();
 		if (m_method == METHOD_GET) {
-			path = m_url.getPath().append("?")
-						.append(getParamsStr());
+			path = m_url.getPath();
+			if (!params.empty())
+				path.append("?").append(params);
 		}
 		else {
 			path = m_url.getPath();
-			body = getParamsStr();
+			if (!params.empty())
+				body = params;
 		}
 		request.clear();
 		request.append(getMethodStr()).append(" ");
@@ -127,17 +147,16 @@ namespace lyx {
 		request.append("Host: ").append(m_url.getHostname()).append("\r\n");
 
 		if (!cookies.empty())
-			request.append(getCookiesStr());
+			request.append(cookies);
 
 		if (!body.empty()) {
 			request.append("Content-Length: ")
 				.append(myitoa(body.size())).append("\r\n");
 		}
-		// request.append("Accept: text/html,application/xml,application/xhtml+xml,text/html;*/*\r\n");
-		// request.append("User-Agent: LYX PROG/1.0\r\n");
-		// request.append("Accept-Charset: IOS-8859-1\r\n");
-		// request.append("Accept-Language: en;q=0.5\r\n");
-		// request.append("Accept-Encoding: gzip\r\n");
+
+		if (!headers.empty())
+			request.append(headers);
+
 		request.append("Connection: Close\r\n");	// not support keep-alive
 		request.append("\r\n");
 		if (!body.empty()) {

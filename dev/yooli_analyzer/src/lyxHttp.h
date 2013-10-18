@@ -37,6 +37,7 @@ namespace lyx {
 			}HeaderProcess;
 
 			typedef std::pair<std::string, std::string> Param;
+			typedef std::pair<std::string, std::string> Header;
 
 		public:
 			Http();
@@ -48,6 +49,7 @@ namespace lyx {
 
 			int setMethod(std::string method);
 			int addParam(const std::string key, const std::string val);
+			int addHeader(const std::string title, const std::string content);
 
 			// return status
 			int getResponse(std::string &response);
@@ -65,6 +67,7 @@ namespace lyx {
 			Url m_url;
 			METHOD_TYPE m_method;
 			std::vector<Param> m_params;
+			std::vector<Header> m_headers;
 			static std::map<std::string, TOKEN_TYPE> headerTokenMap;
 			static std::map<TOKEN_TYPE, TOKEN_METHOD> tokenMethodMap;
 
@@ -73,6 +76,7 @@ namespace lyx {
 
 			std::string getMethodStr() const;
 			std::string getParamsStr() const;
+			std::string getHeadersStr() const;
 			std::string getCookiesStr() const;
 			int createRequest(std::string &request);
 			int sendRequest(Socket *psock, const std::string &request);
