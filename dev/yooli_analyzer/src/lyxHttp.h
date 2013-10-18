@@ -6,6 +6,7 @@
 #include "lyxUrl.h"
 #include "lyxSocket.h"
 #include <string>
+#include <vector>
 #include <map>
 
 namespace lyx {
@@ -35,6 +36,8 @@ namespace lyx {
 				TOKEN_METHOD tokMethod;
 			}HeaderProcess;
 
+			typedef std::pair<std::string, std::string> Param;
+
 		public:
 			Http();
 			Http(Url url);
@@ -61,7 +64,7 @@ namespace lyx {
 		private:
 			Url m_url;
 			METHOD_TYPE m_method;
-			std::map<std::string, std::string> m_params;
+			std::vector<Param> m_params;
 			static std::map<std::string, TOKEN_TYPE> headerTokenMap;
 			static std::map<TOKEN_TYPE, TOKEN_METHOD> tokenMethodMap;
 

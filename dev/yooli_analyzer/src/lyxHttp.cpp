@@ -62,7 +62,7 @@ namespace lyx {
 
 	int Http::addParam(const string key, const string val) {
 		// TODO: process '&' '?' etc.
-		m_params.insert(make_pair(key, val));
+		m_params.push_back(make_pair(key, val));
 	}
 
 	string Http::getMethodStr() const {
@@ -81,16 +81,15 @@ namespace lyx {
 
 	string Http::getParamsStr() const {
 		string paramsStr;
-		map<string, string>::const_iterator iter = m_params.begin();
-		if (iter != m_params.end()) {
-			paramsStr.append(iter->first)
-				.append("=").append(iter->second);
-			iter++;
-		}
-		while (iter != m_params.end()) {
-			paramsStr.append("&").append(iter->first)
-				.append("=").append(iter->second);
-			iter++;
+		int len = m_params.size();
+		for (int i = 0; i < len; i++) {
+			const Param &param = m_params[i];
+			paramsStr.append(param.first);
+			paramsStr.append("=");
+			paramsStr.append(param.second);
+			if (i < len - 1) {
+				paramsStr.append("&");
+			}
 		}
 		return paramsStr;
 	}
@@ -100,17 +99,20 @@ namespace lyx {
 		CookieSet cookieSet = csInstence->getCookiesByUrl(m_url);
 		CookieSetIter iter = cookieSet.begin();
 		string cookies;
-		cookies.append("Cookie:");
 		for ( ; iter != cookieSet.end(); iter++) {
 			cookies.append(" ").append(iter->getName());
 			cookies.append("=").append(iter->getVal()).append(";");
 		}
+		if (cookies.empty())
+			return cookies;
+		cookies.insert(0, "Cookie:");
 		cookies.append("\r\n");
 		return cookies;
 	}
 
 	int Http::createRequest(std::string &request) {
 		string body, path;
+		string cookies = getCookiesStr();
 		if (m_method == METHOD_GET) {
 			path = m_url.getPath().append("?")
 						.append(getParamsStr());
@@ -124,7 +126,8 @@ namespace lyx {
 		request.append(path).append(" HTTP/1.1\r\n");
 		request.append("Host: ").append(m_url.getHostname()).append("\r\n");
 
-		request.append(getCookiesStr());
+		if (!cookies.empty())
+			request.append(getCookiesStr());
 
 		if (!body.empty()) {
 			request.append("Content-Length: ")
