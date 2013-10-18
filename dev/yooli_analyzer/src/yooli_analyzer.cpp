@@ -8,11 +8,15 @@ void addCommonHeader(lyx::Http &http) {
 	http.addHeader("Accept", "text/plain, */*; q=0.01");
 	http.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.69 Safari/537.36");
 	http.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-	http.addHeader("Accept-Encoding", "gzip,deflate,sdch");
+	// http.addHeader("Accept-Encoding", "gzip,deflate,sdch");
 	http.addHeader("Accept-Language", "zh-CN,zh;q=0.8");
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+	if (3 != argc) {
+		cout << "usage: ./yooli_analyzer <user_name> <password>" << endl;
+		return 1;
+	}
 	// string yooliUrl = "yttp://www.yooli.com";
 	// lyx::Url yooliUrl("https://github.com:443/");
 	// lyx::Url yooliUrl("http://www.baidu.com:80/");
@@ -33,8 +37,8 @@ int main() {
 	lyx::Url loginUrl("https://www.yooli.com:443/secure/login.action");
 	lyx::Http loginHttp(loginUrl);
 	loginHttp.setMethod("POST");
-	loginHttp.addParam("nickname", "XXX");
-	loginHttp.addParam("password", "XXX");
+	loginHttp.addParam("nickname", argv[1]);
+	loginHttp.addParam("password", argv[2]);
 	loginHttp.addParam("verifycode", "");
 	loginHttp.addParam("chkboxautologin", "false");
 	loginHttp.addHeader("Referer", "https://www.yooli.com/secure/login.jsp");
