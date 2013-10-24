@@ -172,13 +172,12 @@ namespace lyx {
 	int Http::recvResponse(Socket *psock, string &header, string &response) {
 		int isFindHeader = false;
 		const int BUFLEN = 1024 * 8;
-		char buf[BUFLEN + 1];
+		char buf[BUFLEN];
 		int totalrecv = 0;
 		do {
 			int len = psock->rawRecv(buf, BUFLEN);
 			if (len > 0) {
-				buf[len] = '\0';
-				response += buf;
+				response.append(buf, len);
 				// find header
 				if (isFindHeader == false
 					&& response.find("\r\n\r\n") != string::npos) {
